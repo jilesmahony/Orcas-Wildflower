@@ -1,0 +1,10 @@
+name = "orcas-wildflower-checkout"
+main = "index.js"
+compatibility_date = "2024-10-01"
+
+# Non-secret settings — safe to keep here.
+# Secrets (SQUARE_ACCESS_TOKEN, SQUARE_LOCATION_ID) are set separately,
+# see README.md, and never go in this file.
+[vars]
+SQUARE_ENV = "sandbox"           # switch to "production" when you go live
+ALLOWED_ORIGIN = "https://YOUR-GITHUB-USERNAME.github.io"
