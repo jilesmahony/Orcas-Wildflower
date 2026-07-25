@@ -46,7 +46,7 @@ const DATA_SOURCE = {
    ============================================================ */
 const CHECKOUT_CONFIG = {
   squareEnv: "sandbox",          // "sandbox" or "production"
-  squareAppId: "",               // e.g. "sandbox-sq0idb-..."
-  squareLocationId: "",          // e.g. "L1AB2CD3EF4GH"
-  workerUrl: "",                 // e.g. "https://orcas-wildflower-checkout.yourname.workers.dev"
+  squareAppId: "sandbox-sq0idb-x0Q17b6d-SDl4qQmuirgug",               // e.g. "sandbox-sq0idb-..."
+  squareLocationId: "LPYP9MV3YVRJ9",          // e.g. "L1AB2CD3EF4GH"
+  workerUrl: "https://orcas-wildflower-checkout.orcaswildflower.workers.dev",                 // e.g. "https://orcas-wildflower-checkout.yourname.workers.dev"
 };
