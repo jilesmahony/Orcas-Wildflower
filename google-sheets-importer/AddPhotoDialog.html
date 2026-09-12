@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 14px; padding: 6px; color: #232E27; }
+    label { display: block; font-weight: bold; margin: 14px 0 6px; }
+    select, input[type="file"] { width: 100%; padding: 6px; font-size: 14px; }
+    button {
+      background: #29402E; color: white; border: none; padding: 10px 18px;
+      border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; margin-top: 18px;
+    }
+    button:disabled { opacity: 0.5; cursor: default; }
+    #status { margin-top: 14px; font-weight: bold; }
+    .warn { color: #A24653; }
+    .ok { color: #29402E; }
+  </style>
+</head>
+<body>
+  <label for="product">1. Which product is this photo for?</label>
+  <select id="product"><option>Loading products…</option></select>
+
+  <label for="file">2. Choose the photo from your computer or phone</label>
+  <input type="file" id="file" accept="image/*">
+
+  <button id="uploadBtn" onclick="doUpload()">Upload Photo</button>
+  <div id="status"></div>
+
+  <script>
+    // Fill the dropdown as soon as the dialog opens.
+    google.script.run.withSuccessHandler(function (products) {
+      const select = document.getElementById("product");
+      select.innerHTML = "";
+      products.forEach(function (p) {
+        const opt = document.createElement("option");
+        opt.value = p.id;
+        opt.textContent = p.name + " (" + p.id + ")";
+        select.appendChild(opt);
+      });
+    }).withFailureHandler(function (err) {
+      document.getElementById("status").textContent = "Error loading products: " + err.message;
+      document.getElementById("status").className = "warn";
+    }).getProductList();
+
+    function doUpload() {
+      const productId = document.getElementById("product").value;
+      const fileInput = document.getElementById("file");
+      const status = document.getElementById("status");
+      const btn = document.getElementById("uploadBtn");
+      const file = fileInput.files[0];
+
+      if (!productId) { status.textContent = "Pick a product first."; status.className = "warn"; return; }
+      if (!file) { status.textContent = "Choose a photo first."; status.className = "warn"; return; }
+
+      btn.disabled = true;
+      status.textContent = "Uploading…";
+      status.className = "";
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        // e.target.result looks like "data:image/jpeg;base64,AAAA..." — Imgur just wants the part after the comma.
+        const base64 = e.target.result.split(",")[1];
+        google.script.run
+          .withSuccessHandler(function (result) {
+            status.textContent = "Done! Photo added to " + result.productName + ".";
+            status.className = "ok";
+            setTimeout(function () { google.script.host.close(); }, 1800);
+          })
+          .withFailureHandler(function (err) {
+            status.textContent = "Error: " + err.message;
+            status.className = "warn";
+            btn.disabled = false;
+          })
+          .uploadProductPhoto(productId, base64, file.type);
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
+</body>
+</html>

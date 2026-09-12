@@ -42,16 +42,50 @@ cells.
    same way as step 4, then open `ImportDialog.html` from the same
    `google-sheets-importer` folder, copy all of its contents, and
    paste them into this new file.
-10. Save everything: press `Ctrl+S` (Windows) or `Cmd+S` (Mac). It
+10. Repeat steps 7–9 one more time for a **third** file: click **+**
+    → **HTML**, name it exactly `AddPhotoDialog`, delete any
+    placeholder content, then copy everything from
+    `AddPhotoDialog.html` (same folder) and paste it in.
+11. Save everything: press `Ctrl+S` (Windows) or `Cmd+S` (Mac). It
     may ask you to name the whole project — type anything, like
     `Product Importer`, and click **OK**.
-11. Close this Apps Script browser tab and **go back to your actual
+
+## Part A.5 — One-time: connect free photo hosting (imgur)
+
+This is what makes the "Add Product Photo" button work — it's a
+one-time setup for you (not something your aunt needs to touch), so
+photo uploads never need GitHub at all.
+
+1. Go to **https://api.imgur.com/oauth2/addclient**.
+2. Log in or create a free imgur account if it asks.
+3. Fill in the form:
+   - **Application name**: anything, like `Orcas Wildflower Photos`.
+   - **Authorization type**: choose **Anonymous usage without user
+     authorization**.
+   - **Email**: your email address.
+   - Fill in the "how will this be used" box with a sentence or two —
+     anything reasonable works.
+4. Click **Submit**. It shows you a **Client ID** — a short string of
+   letters and numbers. Copy it.
+5. Back in the Apps Script editor tab, open `Code.gs` and find this
+   line near the top:
+   ```
+   const IMGUR_CLIENT_ID = "PASTE_YOUR_IMGUR_CLIENT_ID_HERE";
+   ```
+   Replace the placeholder text between the quotes with the Client ID
+   you copied, keeping the quotation marks. Save (`Ctrl+S` / `Cmd+S`).
+
+This never expires and never needs touching again.
+
+12. Close the Apps Script browser tab and **go back to your actual
     Google Sheet tab**. **Refresh the page** (reload the browser tab —
     click the circular refresh arrow, or press `F5`).
-12. After it reloads, look at the menu bar again. You should now see
+13. After it reloads, look at the menu bar again. You should now see
     a brand new menu item called **Product Catalog** sitting after
-    Help. (If you don't see it yet, wait a few seconds and refresh
-    again — it can take a moment the very first time.)
+    Help, with two options: **Import CSV (replace all)...** and
+    **Add Product Photo...**. (If you don't see it yet, wait a few
+    seconds and refresh again — it can take a moment the very first
+    time.)
 
 **The first time you use it**, Google will ask for permission since
 this is a script you added yourself:
@@ -96,6 +130,30 @@ From now on, whenever you want to bulk-replace your whole catalog
 batch of new items), you can build a new CSV with the same 14 column
 headers and use this same **Import CSV (replace all)** button instead
 of retyping everything by hand.
+
+---
+
+# PART B.5 — Adding photos (this is the easy part for your aunt)
+
+Once Part A and Part A.5 are done, this is the **entire** workflow —
+no GitHub, no code, no copying links. This is the part to show her:
+
+1. Open the Google Sheet.
+2. Click **Product Catalog → Add Product Photo...** in the menu bar.
+3. A small box pops up. Use the dropdown to pick which product the
+   photo is for.
+4. Click **Choose File** (or tap it on a phone) and pick the photo —
+   straight from a camera roll, Downloads folder, wherever it is.
+5. Click **Upload Photo**.
+6. After a few seconds it'll say "Done!" and close itself. The photo
+   is now live on the website for that product — nothing else to do.
+
+That's the whole thing. Adding a second photo to the same product
+later works exactly the same way — it adds onto the first one rather
+than replacing it. If you ever want to *remove* a photo, that one
+small edit does need the Sheet itself: find that product's row, click
+into its `images` cell, and delete the specific link (or the whole
+cell) by hand.
 
 ---
 
@@ -292,6 +350,8 @@ Only do this once Part G works cleanly.
   directly (any single-cell edit updates the live site instantly), or
   build a new CSV and use the **Product Catalog → Import CSV** button
   from Part A/B to replace everything at once.
+- **Add a photo**: **Product Catalog → Add Product Photo...** in the
+  same Sheet — no GitHub involved (see Part B.5).
 - **Fulfilling an order**: open **Square Dashboard → Orders**, find
   the paid order, go to its **Shipments** tab, and click **Create
   label** to buy and print the actual shipping label — this one step
