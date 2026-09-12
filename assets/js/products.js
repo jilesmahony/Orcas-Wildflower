@@ -31,6 +31,10 @@ function csvRowToProduct(row) {
     tags: (row.tags || "").split(",").map((t) => t.trim().toLowerCase()).filter(Boolean),
     images: (row.images || "").split("|").map((s) => s.trim()).filter(Boolean),
     description: (row.description || "").trim(),
+    weight: num(row.weight) || 0.5,
+    length: num(row.length) || 8,
+    width: num(row.width) || 6,
+    height: num(row.height) || 3,
   };
 }
 
@@ -313,14 +317,9 @@ async function initCartPage() {
     .join("");
 
   const subtotal = lines.reduce((sum, l) => sum + l.lineTotal, 0);
-  const cardFee = subtotal * 0.029 + 0.3;
-  const total = subtotal + cardFee;
   summary.innerHTML = `
-    <div class="summary-row"><span>Subtotal</span><span>${money(subtotal)}</span></div>
-    <div class="summary-row"><span>Credit Card Fee</span><span>${money(cardFee)}</span></div>
-    <div class="summary-row"><span>Tax</span><span>Calculated at checkout</span></div>
-    <div class="summary-row"><span>Shipping</span><span>Calculated at checkout</span></div>
-    <div class="summary-row total"><span>Total</span><span>${money(total)}</span></div>`;
+    <div class="summary-row total"><span>Subtotal</span><span>${money(subtotal)}</span></div>
+    <p class="summary-note">Tax, shipping, and the card fee are calculated below once you enter your ZIP code.</p>`;
 
   container.querySelectorAll(".cart-line").forEach((el) => {
     const id = el.dataset.id;

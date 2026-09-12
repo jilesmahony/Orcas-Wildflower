@@ -3,8 +3,20 @@ main = "index.js"
 compatibility_date = "2024-10-01"
 
 # Non-secret settings — safe to keep here.
-# Secrets (SQUARE_ACCESS_TOKEN, SQUARE_LOCATION_ID) are set separately,
-# see README.md, and never go in this file.
+# Secrets (SQUARE_ACCESS_TOKEN, SQUARE_LOCATION_ID, SHIPPO_API_KEY)
+# are set separately via `wrangler secret put`, see README.md —
+# never put those in this file.
 [vars]
 SQUARE_ENV = "sandbox"           # switch to "production" when you go live
 ALLOWED_ORIGIN = "https://YOUR-GITHUB-USERNAME.github.io"
+
+# Your published Google Sheet CSV link (same one from config.js) —
+# the Worker reads this itself so it never has to trust prices sent
+# from the browser.
+SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbx5CPEUx5aXMZIgaHSraev2KWORsZj5CizUZvGebAxncWlS4sfwUEULAMRqfCAB__M8OPNFr3PkRa/pub?gid=1109894403&single=true&output=csv"
+
+# Your shop's real ship-from address, used to get accurate Shippo rates.
+SHOP_ADDRESS_LINE1 = "203 North Beach Road"
+SHOP_CITY = "Eastsound"
+SHOP_STATE = "WA"
+SHOP_ZIP = "98245"

@@ -12,7 +12,7 @@
 
    1. In Google Sheets, create a sheet with one row per product and
       these exact column headers in row 1:
-        id | name | category | subcategory | price | salePrice | stock | tags | images | description
+        id | name | category | subcategory | price | salePrice | stock | tags | images | weight | length | width | height | description
 
       - category must be: clothing / jewelry / accessories
       - subcategory must match one of the sub-tabs (e.g. earrings, hoodies)
@@ -20,6 +20,10 @@
       - images: one or more image URLs separated by a "|" character,
         or leave blank to show a placeholder
       - leave salePrice blank if the item isn't on sale
+      - weight: the shipped weight in pounds (e.g. 0.3), used to get
+        real shipping rates at checkout
+      - length / width / height: the shipping box size in inches —
+        rough estimates are fine, they don't need to be exact
 
    2. In Google Sheets: File → Share → Publish to web → choose the
       sheet → Comma-separated values (.csv) → Publish. Copy the link
@@ -39,14 +43,10 @@ const DATA_SOURCE = {
 
 /* ============================================================
    CHECKOUT_CONFIG
-   Fill these in once your Worker is deployed (see worker/README.md).
-   squareAppId and squareLocationId are PUBLIC values — safe to put
-   here. Your real secret (the access token) lives only in the
-   Worker's environment, never in this file.
+   Just one value: your deployed Worker's URL (see worker/README.md).
+   Everything else — Square credentials, Shippo, tax lookup — lives
+   only in the Worker, never in this file, since this file is public.
    ============================================================ */
 const CHECKOUT_CONFIG = {
-  squareEnv: "sandbox",          // "sandbox" or "production"
-  squareAppId: "sandbox-sq0idb-x0Q17b6d-SDl4qQmuirgug",               // e.g. "sandbox-sq0idb-..."
-  squareLocationId: "LPYP9MV3YVRJ9",          // e.g. "L1AB2CD3EF4GH"
-  workerUrl: "https://orcas-wildflower-checkout.orcaswildflower.workers.dev",                 // e.g. "https://orcas-wildflower-checkout.yourname.workers.dev"
+  workerUrl: "", // e.g. "https://orcas-wildflower-checkout.yourname.workers.dev"
 };
